@@ -59,14 +59,13 @@ function randomish($length = 8) {
 function enforce_token() {
   global $API_TOKEN;
   if($_POST['token'] != $API_TOKEN) {
-    print_r($_POST);
     http_response_code(401);
-    jecho(['error' => "Invalid Token"]);
+    jecho(['status' => "401 Invalid Token"]);
     exit();
   }
 }
 
-function render_image() {
+function render_file() {
   global $UPLOAD_DIR;
   $file = join_paths($UPLOAD_DIR, basename($_GET['i']));
   if (file_exists($file)) {
@@ -75,14 +74,24 @@ function render_image() {
     exit();
   } else {
     http_response_code(404);
-    jecho(['error' => "File Not Found"]);
+    jecho(['status' => "404 File Not Found"]);
   }
 }
 
-function process_image_upload() {
+function process_test_connection() {
+  if($_POST['test'] == "true") {
+    http_response_code(202);
+    jecho(['status' => "202 Accepted"]);
+    exit();
+  }
+}
+
+function process_file_upload() {
   global $UPLOAD_DIR;
 
   if(!is_dir($UPLOAD_DIR)) { mkdir($UPLOAD_DIR); }
+
+  header('Content-Type: application/json');
 
   $protocol= (empty($_SERVER['HTTPS'])) ? 'http://' : 'https://';
   $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
@@ -90,20 +99,21 @@ function process_image_upload() {
   $upload_file = join_paths($UPLOAD_DIR, $upload_name);
   $public_url = $protocol . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . "/?i=" . $upload_name;
 
-  header('Content-Type: application/json');
 
   if (move_uploaded_file($_FILES['file']['tmp_name'], $upload_file)) {
     jecho(["public_url" => $public_url]);
   } else {
-    jecho(['error' => "Unable to process image upload"]);
+    jecho(['error' => "Unable to process file upload"]);
   }
+
 }
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
   enforce_token();
-  process_image_upload();
+  process_test_connection();
+  process_file_upload();
 } else {
-  render_image();
+  render_file();
 }
 
 ?>
