@@ -22,7 +22,7 @@ For testing purposes you can use `curl` to test the script directly:
 
 ```
 curl -i -X POST \
-  -F "token=iuqb8nXExseZZjvPmrWYAmA9MVZjjZvr" \
-  -F "file=@test.jpg" \
+  -F "token=change_this_token" \
+  -F "file=@path/to/test.jpg" \
    http://example.com/captured.php
 ```
