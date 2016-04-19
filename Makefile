@@ -9,5 +9,5 @@ SERVER=$(CAPTURED_DEPLOY_SERVER)
 
 all: deploy
 deploy:
-	rsync $(OPTIONS) ./ $(SERVER) --exclude="Makefile" --exclude="*DS_Store" --exclude=".git"
+	rsync $(OPTIONS) ./ $(SERVER) --exclude="Makefile" --exclude="*DS_Store" --exclude=".*"
 
