@@ -26,3 +26,7 @@ curl -i -X POST \
   -F "file=@path/to/test.jpg" \
    http://example.com/captured.php
 ```
+
+### Alternatives
+
+If you are interested in a modernized alternative with additional security benefits and configuration (such as filenames), you can check out Log1x's [Captured](https://github.com/Log1x/captured) package.
